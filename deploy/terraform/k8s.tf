@@ -4,39 +4,39 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "nest" {
   metadata {
-    name = "nest-app"
+    name = var.app_ns
   }
 }
 
 resource "kubernetes_deployment" "backend-nest" {
   metadata {
-    name      = "backend-nest"
+    name      = var.app_name
     namespace = kubernetes_namespace.nest.metadata.0.name
     labels = {
-      app = "nest"
+      app = var.app_label
     }
   }
 
   spec {
-    replicas = 3
+    replicas = var.replicas
 
     selector {
       match_labels = {
-        app = "nest"
+        app = var.app_label
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "nest"
+          app = var.app_label
         }
       }
 
       spec {
         container {
-          image = "jeffqev/ci-nest:main"
-          name  = "backend-nest"
+          image = var.app_image
+          name  = var.app_name
         }
       }
     }
@@ -45,7 +45,7 @@ resource "kubernetes_deployment" "backend-nest" {
 
 resource "kubernetes_service" "backend-nest" {
   metadata {
-    name      = "backend-nest"
+    name      = var.app_name
     namespace = kubernetes_namespace.nest.metadata.0.name
 
   }
@@ -55,10 +55,10 @@ resource "kubernetes_service" "backend-nest" {
     }
 
     port {
-      port        = 80
-      target_port = 3000
+      port        = var.service.port
+      target_port = var.service.target_port
     }
 
-    type = "NodePort"
+    type = var.service.type
   }
 }
