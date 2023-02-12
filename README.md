@@ -2,7 +2,7 @@
 
 ## Install lxc and create a profile 
 
-* [Official documentation](https://microk8s.io/docs/lxd)
+* [Official documentation](https://microk8s.io/docs/install-lxd)
 
 * Summary
 
